@@ -3,6 +3,7 @@
 
 import Cocoa
 import ServiceManagement
+import SystemExtensions
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate {
@@ -27,6 +28,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         Logger.configureGlobal(tagged: "APP", withFilePath: FileManager.logFileURL?.path)
+        installSystemExtensionIfNeeded()
         registerLoginItem(shouldLaunchAtLogin: true)
 
         var isLaunchedAtLogin = false
@@ -225,6 +227,37 @@ extension AppDelegate: StatusMenuWindowDelegate {
             manageTunnelsWindowObject?.makeKeyAndOrderFront(self)
             completion?(manageTunnelsWindowObject)
         }
+    }
+}
+
+// MARK: - System Extension Installation
+
+extension AppDelegate: OSSystemExtensionRequestDelegate {
+
+    func installSystemExtensionIfNeeded() {
+        guard let appBundleId = Bundle.main.bundleIdentifier else { return }
+        let extensionId = "\(appBundleId).network-extension"
+        let request = OSSystemExtensionRequest.activationRequest(forExtensionWithIdentifier: extensionId, queue: .main)
+        request.delegate = self
+        OSSystemExtensionManager.shared.submitRequest(request)
+    }
+
+    func request(_ request: OSSystemExtensionRequest,
+                 actionForReplacingExtension existing: OSSystemExtensionProperties,
+                 withExtension ext: OSSystemExtensionProperties) -> OSSystemExtensionRequest.ReplacementAction {
+        return .replace
+    }
+
+    func requestNeedsUserApproval(_ request: OSSystemExtensionRequest) {
+        wg_log(.info, staticMessage: "System extension requires user approval in System Settings")
+    }
+
+    func request(_ request: OSSystemExtensionRequest, didFinishWithResult result: OSSystemExtensionRequest.Result) {
+        wg_log(.info, message: "System extension installation result: \(result.rawValue)")
+    }
+
+    func request(_ request: OSSystemExtensionRequest, didFailWithError error: Error) {
+        wg_log(.error, message: "System extension installation failed: \(error.localizedDescription)")
     }
 }
 

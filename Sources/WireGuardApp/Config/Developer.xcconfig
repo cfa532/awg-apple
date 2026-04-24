@@ -1,0 +1,13 @@
+// Developer.xcconfig
+
+// You Apple developer account's Team ID
+DEVELOPMENT_TEAM = 96LBXG78A7
+
+// The bundle identifier of the apps.
+// Should be an app id created at developer.apple.com
+// with Network Extensions capability.
+APP_ID_IOS = com.chaofang.awg.ios
+APP_ID_MACOS = com.chaofang.awg2.macos
+
+// Universal binary (Apple Silicon + Intel)
+ARCHS = arm64 x86_64

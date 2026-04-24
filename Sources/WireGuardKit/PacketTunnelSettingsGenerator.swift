@@ -143,7 +143,7 @@ class PacketTunnelSettingsGenerator {
         let (ipv4Addresses, ipv6Addresses) = addresses()
         let (ipv4IncludedRoutes, ipv6IncludedRoutes) = includedRoutes()
         let (ipv4ExcludedRoutes, ipv6ExcludedRoutes) = excludedRoutes()
-        
+
         let ipv4Settings = NEIPv4Settings(addresses: ipv4Addresses.map { $0.destinationAddress }, subnetMasks: ipv4Addresses.map { $0.destinationSubnetMask })
         ipv4Settings.includedRoutes = ipv4IncludedRoutes
         ipv4Settings.excludedRoutes = ipv4ExcludedRoutes
@@ -202,7 +202,7 @@ class PacketTunnelSettingsGenerator {
         }
         return (ipv4IncludedRoutes, ipv6IncludedRoutes)
     }
-    
+
     private func excludedRoutes() -> ([NEIPv4Route], [NEIPv6Route]) {
         var ipv4ExcludedRoutes = [NEIPv4Route]()
         var ipv6ExcludedRoutes = [NEIPv6Route]()
@@ -217,7 +217,7 @@ class PacketTunnelSettingsGenerator {
                 fatalError()
             }
         }
-        
+
         for peer in tunnelConfiguration.peers {
             for addressRange in peer.excludeIPs {
                 if addressRange.address is IPv4Address {
@@ -227,7 +227,7 @@ class PacketTunnelSettingsGenerator {
                 }
             }
         }
-        
+
         return (ipv4ExcludedRoutes, ipv6ExcludedRoutes)
     }
 
