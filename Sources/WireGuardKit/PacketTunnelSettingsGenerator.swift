@@ -62,6 +62,9 @@ class PacketTunnelSettingsGenerator {
         if let S2 = tunnelConfiguration.interface.S2 {
             wgSettings.append("s2=\(S2)\n")
         }
+        if let S3 = tunnelConfiguration.interface.S3 {
+            wgSettings.append("s3=\(S3)\n")
+        }
         if let H1 = tunnelConfiguration.interface.H1 {
             wgSettings.append("h1=\(H1)\n")
         }

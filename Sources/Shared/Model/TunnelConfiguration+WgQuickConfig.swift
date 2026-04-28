@@ -72,7 +72,7 @@ extension TunnelConfiguration {
                     } else {
                         attributes[key] = value
                     }
-                    let interfaceSectionKeys: Set<String> = ["privatekey", "listenport", "address", "dns", "mtu", "jc", "jmin", "jmax", "s1", "s2", "h1", "h2", "h3", "h4"]
+                    let interfaceSectionKeys: Set<String> = ["privatekey", "listenport", "address", "dns", "mtu", "jc", "jmin", "jmax", "s1", "s2", "s3", "h1", "h2", "h3", "h4"]
                     let peerSectionKeys: Set<String> = ["publickey", "presharedkey", "allowedips", "endpoint", "persistentkeepalive"]
                     if parserState == .inInterfaceSection {
                         guard interfaceSectionKeys.contains(key) else {
@@ -144,6 +144,9 @@ extension TunnelConfiguration {
         }
         if let S2 = interface.S2 {
             output.append("S2 = \(S2)\n")
+        }
+        if let S3 = interface.S3 {
+            output.append("S3 = \(S3)\n")
         }
         if let H1 = interface.H1 {
             output.append("H1 = \(H1)\n")
@@ -264,6 +267,12 @@ extension TunnelConfiguration {
                 throw ParseError.interfaceHasInvalidCustomParam(S2String)
             }
             interface.S2 = s2
+        }
+        if let S3String = attributes["s3"] {
+            guard let s3 = UInt16(S3String) else {
+                throw ParseError.interfaceHasInvalidCustomParam(S3String)
+            }
+            interface.S3 = s3
         }
         if let H1String = attributes["h1"] {
             guard let h1 = UInt32(H1String) else {

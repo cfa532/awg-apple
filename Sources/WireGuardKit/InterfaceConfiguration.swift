@@ -12,6 +12,7 @@ public struct InterfaceConfiguration {
     public var Jmax: UInt16?
     public var S1: UInt16?
     public var S2: UInt16?
+    public var S3: UInt16?
     public var H1: UInt32?
     public var H2: UInt32?
     public var H3: UInt32?
